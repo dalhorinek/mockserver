@@ -1,0 +1,1 @@
+(request) => (new Date()).toString()

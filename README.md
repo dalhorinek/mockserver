@@ -71,9 +71,16 @@ It just creates .data.raw and .header.json files
 If Authorization header is present, data are stored into /private folder, otherwise in /public folder. 
 This enables to mock different requests on same endpoint with and without authorization
 
-=== Func data file ===
-You can also create a .func.js file, if this file is present, then it's loaded and it should contain a function.
+## Definition file and Func file 
+A definition file is a file that matches a request path and has .json extension. 
+/some/path => /public/some/path.json 
+
+If this file is present, it's content is read. Currently it can contain only a "type" attribute. This attribute can contain 
+a value of "data" or "func". The data value is default and when this file is not present, the type data is used. 
+
+For the func type, then the mock server will look for a .func.js file, if this file is present, then it's loaded and it should contain a function.
 A function that receives a request and returns data content. 
+(See date endpoint example in examples directory)
 
 Example:
 ```
@@ -160,7 +167,7 @@ $ curl http://localhost:3000/hello
 </html>
 ```
 
-And also you can test to respond with 500 error
+Test to respond with 500 error
 ```
 $ curl http://localhost:3000/fail --head
 HTTP/1.1 500 Internal Server Error
@@ -168,4 +175,10 @@ X-Powered-By: Express
 content-type: text/html
 Date: Thu, 24 May 2018 18:53:26 GMT
 Connection: keep-alive
+```
+
+Test func.js file with current date response
+```
+$ curl http://localhost:3000/date
+Thu May 24 2018 21:08:35 GMT+0200 (CEST)
 ```
