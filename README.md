@@ -10,17 +10,32 @@ $ npm install
 ```
 
 # Usage
+
+## Help 
+```
+$ server --help 
+server.js [options] mock_directory
+
+ options:
+  --proxy proxy_target - starts is fallback mode - mock first and fallbacks to proxy
+  --proxy-full - full mode - everything is proxied to proxy target
+  --proxy-first - first ask proxy target, on fail try to return data from mocks
+  --proxy-timeout - how long to wait umtil timeout is thrown on proxy request (default is 10s)
+  --record - save proxied requests to mocks
+  --port port_number - local port for mock server
+```
+
 ## Modes
 The server has 4 different modes. 
 
-1) FULL_MOCK 
+### FULL_MOCK 
   - only .data.json files from given directory are served 
 
   ```
   $ server data
   ```
 
-2) PROXY_FIRST 
+### PROXY_FIRST 
   - when you specify a proxy server, it tries to proxy the request to the server, if it's successful, it returns the response from proxy
   - when there is a timeout on the proxy server, mock data are returned
   - when there are 3 or more failed attempts on proxy server, it automatically switches to FULL_MOCK mode 
@@ -29,21 +44,21 @@ The server has 4 different modes.
   $ server data --proxy https://some.proxy.server --proxy-first
   ```
 
-3) MOCK_FIRST 
+### MOCK_FIRST 
   - it tries to read data from .data.json files and if the data is not present, it proxies the request to the proxy server
 
   ```
   $ server data --proxy https://some.proxy.server
   ```
 
-4) FULL_PROXY 
+### FULL_PROXY 
   - it proxies all requests to the proxy server
 
   ```
   $ server data --proxy https://some.proxy.server --proxy-full 
   ``` 
 
-### Recording
+## Recording
 If you use mode PROXY_FIRST, MOCK_FIRST or FULL_PROXY, you can specify --record option and this will 
 record responses from the proxy server so you can use real data as mocks whne proxy is not available.
 It just creates .data.json and .header.json files 
@@ -52,7 +67,7 @@ It just creates .data.json and .header.json files
   $ server data --proxy https://some.proxy.server --proxy-first --record
   ```
 
-### Public and private context
+## Public and private context
 If Authorization header is present, data are stored into /private folder, otherwise in /public folder. 
 This enables to mock different requests on same endpoint with and without authorization
 
