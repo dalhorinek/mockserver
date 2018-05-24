@@ -1,0 +1,29 @@
+{
+  "name": "mock-server",
+  "version": "0.1.0",
+  "description": "Mock server for Apollo",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mock",
+    "server",
+    "apollo"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "fs": "0.0.1-security",
+    "http": "0.0.0",
+    "path": "^0.12.7"
+  },
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "cli-color": "^1.2.0",
+    "command-line-args": "^4.0.2",
+    "express": "^4.15.3",
+    "mkdirp": "^0.5.1",
+    "then-request": "^2.2.0"
+  }
+}
