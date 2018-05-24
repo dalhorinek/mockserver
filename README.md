@@ -9,6 +9,11 @@ The content of the .data.raw file is returned and if .headers.json file is prese
 $ npm install 
 ```
 
+or with yarn
+```
+$ yarn install 
+```
+
 # Usage
 
 ## Help 
