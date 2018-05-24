@@ -1,7 +1,7 @@
 Mock server to serve mock data files, proxy to remote servers and record responses.
 
-It searches for files by requested path, it looks for file .data.json and .headers.json 
-The content of the .data.json file is returned and if .headers.json file is preseent, these headers are used instead of default headers. 
+It searches for files by requested path, it looks for file .data.raw and .headers.json 
+The content of the .data.raw file is returned and if .headers.json file is preseent, these headers are used instead of default headers. 
 
 # Installation
 
@@ -29,7 +29,7 @@ server.js [options] mock_directory
 The server has 4 different modes. 
 
 ### FULL_MOCK 
-  - only .data.json files from given directory are served 
+  - only .data.raw files from given directory are served 
 
   ```
   $ server data
@@ -45,7 +45,7 @@ The server has 4 different modes.
   ```
 
 ### MOCK_FIRST 
-  - it tries to read data from .data.json files and if the data is not present, it proxies the request to the proxy server
+  - it tries to read data from .data.raw files and if the data is not present, it proxies the request to the proxy server
 
   ```
   $ server data --proxy https://some.proxy.server
@@ -61,7 +61,7 @@ The server has 4 different modes.
 ## Recording
 If you use mode PROXY_FIRST, MOCK_FIRST or FULL_PROXY, you can specify --record option and this will 
 record responses from the proxy server so you can use real data as mocks whne proxy is not available.
-It just creates .data.json and .header.json files 
+It just creates .data.raw and .header.json files 
 
   ``` 
   $ server data --proxy https://some.proxy.server --proxy-first --record
@@ -86,7 +86,7 @@ Example:
 ```
 
 Now when you call /some/endpoint it will always return current date. 
-If .func.js and .data.json are both present, .func.js is picked as first option
+If .func.js and .data.raw are both present, .func.js is picked as first option
 
 ### Post data specific response
 For every POST request a numeric hash is calculated and mock server looks first for a file with this
@@ -118,7 +118,7 @@ sample
     `- fail.data.raw
 
 
-init.data.json 
+init.data.raw 
 -----------------------
 {
     "init": "Hello World"
