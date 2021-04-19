@@ -1,11 +1,9 @@
 #!/usr/bin/env node
-
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-
 const express = require('express')
 const mkdirp = require('mkdirp')
 const clc = require('cli-color')
 const thenRequest = require('then-request')
+const crypto = require('crypto')
 const commandLineArgs = require('command-line-args')
 const path = require('path')
 const http = require('http')
@@ -125,15 +123,7 @@ if (typeof dataDirectory === 'undefined' && mockProxyMode !== PROXY_MODES.FULL_P
 }
 
 function hashCode(str) {
-  let hash = 0;
-  if (str.length == 0) return hash;
-
-  for (i = 0; i < str.length; i++) {
-    let char = str.charCodeAt(i);
-    hash = ((hash<<5)-hash) + char;
-    hash = hash & hash; // Convert to 32bit integer
-  }
-  return hash;
+  return crypto.createHash('md5').update(str).digest('hex')
 }
 
 function hasRequestPostData(requestBody) {
@@ -182,6 +172,7 @@ function readFile(type, url, request) {
     contentPath = getMockFileFullPath(request, getFileName(type, url))
   }
 
+  console.log("[readFile] contentPath: ", contentPath)
   if (fs.existsSync(contentPath)) {
     console.log(` --> ${clc.blue('[Mock]')} reading ${type} file ${contentPath}`)
 
@@ -302,6 +293,10 @@ function proxyRequest(request, callback, requestId) {
   const fullUrl = `${proxy}${url}`
   console.log(` --> ${clc.magenta(`[Proxy:${requestId}]`)} request ${method} ${fullUrl}`)
 
+  console.log("Request headers: ", request.headers)
+
+  delete request.headers["host"]
+
   const options = {
     headers: request.headers,
     timeout: proxyTimeout * 1000
@@ -332,8 +327,10 @@ function proxyRequest(request, callback, requestId) {
     }
 
     console.log(` --> ${clc.magenta(`[Proxy:${requestId}]`)} POST data ${postOptions.body}`)
+    console.log(method, fullUrl, postOptions)
     thenRequest(method, fullUrl, postOptions).then(
       response => {
+        console.log("[ProxyRequest::RESPONSE]: ", response)
         const fullHeaders = Object.assign(
           {},
           response.headers,
@@ -346,6 +343,7 @@ function proxyRequest(request, callback, requestId) {
         callback(fullHeaders, response.body)
       }, 
       error => {
+        console.log("[ProxyRequest::ERROR]: ", error)
         proxyError(error, callback, requestId)
       }
     )
