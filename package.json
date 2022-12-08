@@ -22,7 +22,7 @@
     "body-parser": "^1.17.2",
     "cli-color": "^1.2.0",
     "command-line-args": "^4.0.2",
-    "express": "^4.15.3",
+    "express": "^4.17.3",
     "mkdirp": "^0.5.1",
     "then-request": "^2.2.0"
   }
